@@ -31,10 +31,31 @@
                 </div>
                 <div class="col-12 col-sm-4 order-box">
                     <h2>Order List</h2>
+                    <div class="mb-5">
+                        <div class="mb-3">
+                            <label for="customerName" class="form-label">Customer Name</label>
+                            <input type="text" name="customerName" id="customerName" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="tableNo" class="form-label">Table No.</label>
+                            <input type="text" name="tableNo" id="tableNo" class="form-control">
+                        </div>
+                    </div>
+                    <hr/>
                     <div class="item-box">
-                        <div v-for="order in orders" class="d-flex justify-content-between">
-                            <span>{{ order.name }} (x{{ order.qty }})</span>
-                            <span>Rp. {{ order.price }}</span>
+                        <div v-for="order in orders" class="mb-3">
+                            <div class="d-flex justify-content-between">
+                                <span>{{ order.name }} (x{{ order.qty }})</span>
+                                <span>Rp. {{ order.price }}</span>
+                            </div>
+                            <div>
+                                <span style="font-size: 14px;" class="text-muted">{{ order.eachPrice }}</span>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-info me-2" @click="decreaseItemQty(order)">-</button>
+                                    <button class="btn btn-sm btn-outline-success me-2" @click="increaseItemQty(order)"">+</button>
+                                    <button class="btn btn-sm btn-outline-danger me-2" @click="deleteItem(order)">Delete</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <hr/>
@@ -43,6 +64,9 @@
                             <span>Total</span>
                             <span>Rp. {{ total }}</span>
                         </div>
+                    </div>
+                    <div class="mt-3">
+                        <button class="btn btn-success form-control">Submit</button>
                     </div>
                 </div>
             </div>
@@ -115,20 +139,62 @@ export default {
             // console.log(id)
             let item = this.filteredItems.filter(item => item.id == id)[0]
             let orderItem = Object.assign({}, item)
+            orderItem.eachPrice = item.price
+
             let indexOfItem = this.orders.map(e => e.id).indexOf(orderItem.id)
             if (indexOfItem != -1) { //jika item sudah ada di keranjang => tambah qty & hitung jumlah price 
                 this.orders[indexOfItem].qty++
-                this.orders[indexOfItem].price = this.orders[indexOfItem].price * this.orders[indexOfItem].qty
+                this.orders[indexOfItem].price = this.orders[indexOfItem].eachPrice * this.orders[indexOfItem].qty
             } else {
                 orderItem.qty = 1
                 this.orders.push(orderItem)
             }
+
             let orderPrice = this.orders.map(order => order.price)
             let totalPrice = 0
             orderPrice.forEach(price => {
                 totalPrice += price
             })
 
+            this.total = totalPrice
+        },
+        decreaseItemQty(item) {
+            if (item.qty <= 1) {
+                return
+            }
+
+            let indexOfItem = this.orders(e => e.id).indexOf(item.id)
+            this.orders[indexOfItem].qty--
+            this.orders[indexOfItem].price = this.orders[indexOfItem].eachPrice * this.orders[indexOfItem].qty
+
+            let orderPrice = this.orders.map(order => order.price)
+            let totalPrice = 0
+            orderPrice.forEach(price => {
+                totalPrice += price
+            })
+            this.total = totalPrice
+        },
+        increaseItemQty(item) {
+            let indexOfItem = this.orders(e => e.id).indexOf(item.id)
+            this.orders[indexOfItem].qty++
+            this.orders[indexOfItem].price = this.orders[indexOfItem].eachPrice * this.orders[indexOfItem].qty
+
+            let orderPrice = this.orders.map(order => order.price)
+            let totalPrice = 0
+            orderPrice.forEach(price => {
+                totalPrice += price
+            })
+            this.total = totalPrice
+        },
+        deleteItem(item) {
+            let indexOfItem = this.orders(e => e.id).indexOf(item.id)
+            this.orders.splice(indexOfItem, 1)
+
+            let orderPrice = this.orders.map(order => order.price)
+            let totalPrice = 0
+            orderPrice.forEach(price => {
+                totalPrice += price
+            })
             this.total = totalPrice
         }
     },
