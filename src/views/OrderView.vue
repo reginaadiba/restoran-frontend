@@ -34,7 +34,7 @@
                     <div class="mb-5">
                         <div class="mb-3">
                             <label for="customerName" class="form-label">Customer Name</label>
-                            <input type="text" name="customerName" id="customerName" class="form-control">
+                            <input type="text" v-model="customerName" name="customerName" id="customerName" class="form-control">
                         </div>
                         <div class="mb-3">
                             <label for="tableNo" class="form-label">Table No.</label>
@@ -52,7 +52,7 @@
                                 <span style="font-size: 14px;" class="text-muted">{{ order.eachPrice }}</span>
                                 <div>
                                     <button class="btn btn-sm btn-outline-info me-2" @click="decreaseItemQty(order)">-</button>
-                                    <button class="btn btn-sm btn-outline-success me-2" @click="increaseItemQty(order)"">+</button>
+                                    <button class="btn btn-sm btn-outline-success me-2" @click="increaseItemQty(order)">+</button>
                                     <button class="btn btn-sm btn-outline-danger me-2" @click="deleteItem(order)">Delete</button>
                                 </div>
                             </div>
@@ -66,7 +66,7 @@
                         </div>
                     </div>
                     <div class="mt-3">
-                        <button class="btn btn-success form-control">Submit</button>
+                        <button class="btn btn-success form-control" @click="submitOrder()">Submit</button>
                     </div>
                 </div>
             </div>
@@ -91,7 +91,9 @@ export default {
             keyword: '',
             url: 'http://restoran.test/storage/items/',
             orders: [],
-            total: 0
+            total: 0,
+            customerName: '',
+            tableNo: ''
         }
     },
     mounted() {
@@ -196,6 +198,38 @@ export default {
                 totalPrice += price
             })
             this.total = totalPrice
+        },
+        submitOrder() {
+            if (this.customerName == '' || this.tableNo == '') {
+                alert('customer name and table no cannot be empty')
+            }
+
+            let itemIds = this.orders.map(item => item.id)
+
+            axios.post('http://restoran.test/api/order', {
+                'customer_name': this.customerName,
+                'table_no': this.tableNo,
+                'items': itemIds
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+                .then((response) => {
+                    console.log(response.data.data);
+                    // data.items = response.data.data;
+                    this.items = response.data.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    if (error.response.status == 401) {
+                        localStorage.removeItem('token')
+                        localStorage.removeItem('email')
+                        localStorage.removeItem('name')
+                        localStorage.removeItem('role_id')
+                        router.push({name: 'login'})
+                    }
+                });
         }
     },
 }
