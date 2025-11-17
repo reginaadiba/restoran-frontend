@@ -71,7 +71,8 @@
                         </div>
                     </div>
                     <div class="mt-3">
-                        <button class="btn btn-success form-control" @click="submitOrder()">Submit</button>
+                        <button class="btn btn-success form-control" :disabled="processing" @click="submitOrder()">{{
+                            processing ? 'Processing Order...' : 'Submit' }}</button>
                     </div>
                 </div>
             </div>
@@ -98,7 +99,8 @@ export default {
             orders: [],
             total: 0,
             customerName: '',
-            tableNo: ''
+            tableNo: '',
+            processing: false
         }
     },
     mounted() {
@@ -216,6 +218,7 @@ export default {
                 }
             })
 
+            this.processing = true
             axios.post('http://restoran.test/api/order', {
                 'customer_name': this.customerName,
                 'table_no': this.tableNo,
@@ -227,8 +230,12 @@ export default {
             })
                 .then((response) => {
                     console.log(response.data.data);
-                    // data.items = response.data.data;
-                    this.items = response.data.data;
+                    alert('order saved successfully')
+                    this.orders = []
+                    this.customerName = ''
+                    this.tableNo = ''
+                    this.total = 0
+                    // this.items = response.data.data;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -239,7 +246,8 @@ export default {
                         localStorage.removeItem('role_id')
                         router.push({ name: 'login' })
                     }
-                });
+                })
+                .finally(() => this.processing = false);
         }
     },
 }

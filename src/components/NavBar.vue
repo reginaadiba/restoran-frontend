@@ -16,6 +16,9 @@
             <li class="nav-item me-3" v-if="role == 4 || role == 1">
               <RouterLink to="/order">Order</RouterLink>
             </li>
+            <li class="nav-item me-3">
+              <RouterLink to="/order-list">Order List</RouterLink>
+            </li>
             <li class="nav-item me-3" v-if="role == 4">
               <RouterLink to="/product">Products</RouterLink>
             </li>
@@ -38,24 +41,24 @@ import axios from 'axios';
 import router from '@/router';
 
 export default {
-    props: ['name', 'role'],
-    methods: {
-        logout() {
-            axios.get('http://restoran.test/api/auth/logout', {
-                headers: { "Authorization": `Bearer ${localStorage.getItem('token')}` }
-            })
-                .then(function (response) {
-                    console.log(response);
-                    localStorage.removeItem('email')
-                    localStorage.removeItem('name')
-                    localStorage.removeItem('role_id')
-                    localStorage.removeItem('token')
-                    router.push({ name: 'login' })
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        }
-    },
+  props: ['name', 'role'],
+  methods: {
+    logout() {
+      axios.get('http://restoran.test/api/auth/logout', {
+        headers: { "Authorization": `Bearer ${localStorage.getItem('token')}` }
+      })
+        .then(function (response) {
+          console.log(response);
+          localStorage.removeItem('email')
+          localStorage.removeItem('name')
+          localStorage.removeItem('role_id')
+          localStorage.removeItem('token')
+          router.push({ name: 'login' })
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  },
 }
 </script>
