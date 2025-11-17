@@ -79,6 +79,14 @@ export default {
                     this.items = response.data.data;
                 })
                 .catch(function (error) {
+                    // console.log(error.response.status)
+                    if (error.response.status == 401) {
+                        localStorage.removeItem('token')
+                        localStorage.removeItem('email')
+                        localStorage.removeItem('name')
+                        localStorage.removeItem('role_id')
+                        router.push({name: 'login'})
+                    }
                     console.log(error);
                 });
         },
