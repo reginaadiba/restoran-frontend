@@ -22,15 +22,28 @@
                                     <div class="card-body text-center">
                                         <h5 class="card-title">{{ item.name }}</h5>
                                         <p class="card-text">Rp. {{ item.price }}</p>
-                                        <p><button class="btn btn-primary">Order</button></p>
+                                        <p><button class="btn btn-primary" @click="orderItem(item.id)">Order</button></p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-sm-4 bordered">
-                    List Order
+                <div class="col-12 col-sm-4 order-box">
+                    <h2>Order List</h2>
+                    <div class="item-box">
+                        <div v-for="order in orders" class="d-flex justify-content-between">
+                            <span>{{ order.name }} (x{{ order.qty }})</span>
+                            <span>Rp. {{ order.price }}</span>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="total-box">
+                        <div class="d-flex justify-content-between">
+                            <span>Total</span>
+                            <span>Rp. {{ total }}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -52,7 +65,9 @@ export default {
             items: [],
             filteredItems: [],
             keyword: '',
-            url: 'http://restoran.test/storage/items/'
+            url: 'http://restoran.test/storage/items/',
+            orders: [],
+            total: 0
         }
     },
     mounted() {
@@ -95,6 +110,26 @@ export default {
             this.filteredItems = this.items.filter(
                 item => item.name.toLowerCase().includes(this.keyword.toLowerCase())
             )
+        },
+        orderItem(id) {
+            // console.log(id)
+            let item = this.filteredItems.filter(item => item.id == id)[0]
+            let orderItem = Object.assign({}, item)
+            let indexOfItem = this.orders.map(e => e.id).indexOf(orderItem.id)
+            if (indexOfItem != -1) { //jika item sudah ada di keranjang => tambah qty & hitung jumlah price 
+                this.orders[indexOfItem].qty++
+                this.orders[indexOfItem].price = this.orders[indexOfItem].price * this.orders[indexOfItem].qty
+            } else {
+                orderItem.qty = 1
+                this.orders.push(orderItem)
+            }
+            let orderPrice = this.orders.map(order => order.price)
+            let totalPrice = 0
+            orderPrice.forEach(price => {
+                totalPrice += price
+            })
+
+            this.total = totalPrice
         }
     },
 }
@@ -102,5 +137,12 @@ export default {
 <style>
 .bordered {
     border: solid 1px;
+}
+.order-box {
+    border-left: solid 1px #ccc;
+}
+.total-box {
+    font-size: 26px;
+    font-weight: bold;
 }
 </style>
