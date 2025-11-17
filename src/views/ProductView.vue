@@ -21,8 +21,12 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name }}</td>
                     <td>Rp {{ item.price }}</td>
-                    <td><img :src="url + item.image" alt="" style="width: 100px; height: 100px;"
-                            class="object-fit-cover"></td>
+                    <td>
+                        <img v-if="item.image" :src="url + item.image" style="width: 100px; height: 100px;"
+                            class="object-fit-cover">
+                        <img v-else src="@/assets/images/nopict.png" style="width: 100px; height: 100px;"
+                            class="object-fit-cover">
+                    </td>
                     <td>
                         <RouterLink :to="{ name: 'productUpdate', params: { productId: item.id } }">Edit</RouterLink>
                     </td>
