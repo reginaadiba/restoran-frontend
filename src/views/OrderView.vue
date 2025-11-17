@@ -9,7 +9,7 @@
                     <!-- Search box -->
                     <div class="col-12">
                         <input type="text" v-model="keyword" class="form-control" placeholder="Search Here"
-                            :onchange="searchItems()">
+                            :onchange="searchItem()">
                     </div>
                     <hr />
                     <!-- Item List Box class="" -->
@@ -22,7 +22,8 @@
                                     <div class="card-body text-center">
                                         <h5 class="card-title">{{ item.name }}</h5>
                                         <p class="card-text">Rp. {{ item.price }}</p>
-                                        <p><button class="btn btn-primary" @click="orderItem(item.id)">Order</button></p>
+                                        <p><button class="btn btn-primary" @click="orderItem(item.id)">Order</button>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -34,14 +35,15 @@
                     <div class="mb-5">
                         <div class="mb-3">
                             <label for="customerName" class="form-label">Customer Name</label>
-                            <input type="text" v-model="customerName" name="customerName" id="customerName" class="form-control">
+                            <input type="text" v-model="customerName" name="customerName" id="customerName"
+                                class="form-control">
                         </div>
                         <div class="mb-3">
                             <label for="tableNo" class="form-label">Table No.</label>
-                            <input type="text" name="tableNo" id="tableNo" class="form-control">
+                            <input type="text" v-model="tableNo" name="tableNo" id="tableNo" class="form-control">
                         </div>
                     </div>
-                    <hr/>
+                    <hr />
                     <div class="item-box">
                         <div v-for="order in orders" class="mb-3">
                             <div class="d-flex justify-content-between">
@@ -51,14 +53,17 @@
                             <div>
                                 <span style="font-size: 14px;" class="text-muted">{{ order.eachPrice }}</span>
                                 <div>
-                                    <button class="btn btn-sm btn-outline-info me-2" @click="decreaseItemQty(order)">-</button>
-                                    <button class="btn btn-sm btn-outline-success me-2" @click="increaseItemQty(order)">+</button>
-                                    <button class="btn btn-sm btn-outline-danger me-2" @click="deleteItem(order)">Delete</button>
+                                    <button class="btn btn-sm btn-outline-info me-2"
+                                        @click="decreaseItemQty(order)">-</button>
+                                    <button class="btn btn-sm btn-outline-success me-2"
+                                        @click="increaseItemQty(order)">+</button>
+                                    <button class="btn btn-sm btn-outline-danger me-2"
+                                        @click="deleteItem(order)">Delete</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <hr/>
+                    <hr />
                     <div class="total-box">
                         <div class="d-flex justify-content-between">
                             <span>Total</span>
@@ -128,13 +133,12 @@ export default {
                         localStorage.removeItem('email')
                         localStorage.removeItem('name')
                         localStorage.removeItem('role_id')
-                        router.push({name: 'login'})
+                        router.push({ name: 'login' })
                     }
                 });
         },
-        searchItems() {
-            this.filteredItems = this.items.filter(
-                item => item.name.toLowerCase().includes(this.keyword.toLowerCase())
+        searchItem() {
+            this.filteredItems = this.items.filter(item => item.name.toLowerCase().includes(this.keyword.toLowerCase())
             )
         },
         orderItem(id) {
@@ -165,7 +169,7 @@ export default {
                 return
             }
 
-            let indexOfItem = this.orders(e => e.id).indexOf(item.id)
+            let indexOfItem = this.orders.map(e => e.id).indexOf(item.id)
             this.orders[indexOfItem].qty--
             this.orders[indexOfItem].price = this.orders[indexOfItem].eachPrice * this.orders[indexOfItem].qty
 
@@ -177,7 +181,7 @@ export default {
             this.total = totalPrice
         },
         increaseItemQty(item) {
-            let indexOfItem = this.orders(e => e.id).indexOf(item.id)
+            let indexOfItem = this.orders.map(e => e.id).indexOf(item.id)
             this.orders[indexOfItem].qty++
             this.orders[indexOfItem].price = this.orders[indexOfItem].eachPrice * this.orders[indexOfItem].qty
 
@@ -189,7 +193,7 @@ export default {
             this.total = totalPrice
         },
         deleteItem(item) {
-            let indexOfItem = this.orders(e => e.id).indexOf(item.id)
+            let indexOfItem = this.orders.map(e => e.id).indexOf(item.id)
             this.orders.splice(indexOfItem, 1)
 
             let orderPrice = this.orders.map(order => order.price)
@@ -200,16 +204,22 @@ export default {
             this.total = totalPrice
         },
         submitOrder() {
+            // console.log(this.orders);
             if (this.customerName == '' || this.tableNo == '') {
                 alert('customer name and table no cannot be empty')
             }
 
-            let itemIds = this.orders.map(item => item.id)
+            let items = this.orders.map(item => {
+                return {
+                    'id': item.id,
+                    'qty': item.qty
+                }
+            })
 
             axios.post('http://restoran.test/api/order', {
                 'customer_name': this.customerName,
                 'table_no': this.tableNo,
-                'items': itemIds
+                'items': items
             }, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -227,7 +237,7 @@ export default {
                         localStorage.removeItem('email')
                         localStorage.removeItem('name')
                         localStorage.removeItem('role_id')
-                        router.push({name: 'login'})
+                        router.push({ name: 'login' })
                     }
                 });
         }
@@ -238,9 +248,11 @@ export default {
 .bordered {
     border: solid 1px;
 }
+
 .order-box {
     border-left: solid 1px #ccc;
 }
+
 .total-box {
     font-size: 26px;
     font-weight: bold;
