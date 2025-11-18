@@ -30,7 +30,7 @@
                     <td>{{ order.status }}</td>
                     <td>{{ order.waitress.name }}</td>
                     <td>{{ order.cashier ? order.cashier.name : '' }}</td>
-                    <td>Detail</td>
+                    <td><RouterLink :to="{ name: 'productUpdate', params: { productId: item.id } }">View Detail</RouterLink></td>
                 </tr>
             </tbody>
         </table>

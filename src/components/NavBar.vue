@@ -20,6 +20,9 @@
               <RouterLink to="/order-list">Order List</RouterLink>
             </li>
             <li class="nav-item me-3" v-if="role == 4">
+              <RouterLink to="/order-report">Order Report</RouterLink>
+            </li>
+            <li class="nav-item me-3" v-if="role == 4">
               <RouterLink to="/product">Products</RouterLink>
             </li>
             <li class="nav-item">
