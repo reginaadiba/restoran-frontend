@@ -1,7 +1,8 @@
 <template>
-    <!-- NavBar components -->
-    <NavBar :name="userName" :role="roleId" />
     <div class="container mt-5">
+        <!-- NavBar components -->
+        <NavBar :name="userName" :role="roleId" />
+
         <div class="col-12 col-lg-6">
             <h3>Edit Product</h3>
             <form @submit.prevent="updateProduct">
@@ -11,7 +12,8 @@
                 </div>
                 <div class="mb-3">
                     <label for="price">Price</label>
-                    <input type="number" class="form-control" v-model="item.price" id="price" placeholder="Product Price">
+                    <input type="number" class="form-control" v-model="item.price" id="price"
+                        placeholder="Product Price">
                 </div>
                 <div class="mb-3">
                     <label for="image">Current Image</label>
@@ -45,8 +47,8 @@ export default {
             userName: '',
             roleId: '',
             url: 'http://restoran.test/storage/items/',
-            productId:'',
-            item:'',
+            productId: '',
+            item: '',
             file: ''
         }
     },
@@ -66,7 +68,7 @@ export default {
         getItem() {
             // console.log(this.$route.params.productId)
             this.productId = this.$route.params.productId
-            axios.get('http://restoran.test/api/item/'+this.productId, {
+            axios.get('http://restoran.test/api/item/' + this.productId, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -79,7 +81,7 @@ export default {
                 });
         },
         updateProduct() {
-            if(this.item.name == '' || this.item.price == '') {
+            if (this.item.name == '' || this.item.price == '') {
                 alert('data cannot empty')
                 return;
             }
@@ -91,14 +93,14 @@ export default {
             formData.append('image_file', this.file)
             formData.append('category', 'Food')
 
-            axios.post('http://restoran.test/api/item/'+this.productId,
+            axios.post('http://restoran.test/api/item/' + this.productId,
                 formData, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 }
             })
                 .then((response) => {
-                    router.push({name: 'product'})
+                    router.push({ name: 'product' })
                     // this.item = response.data.data;
                 })
                 .catch(function (error) {
@@ -112,6 +114,4 @@ export default {
     },
 }
 </script>
-<style>
-
-</style>
+<style></style>

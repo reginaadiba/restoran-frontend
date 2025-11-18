@@ -1,7 +1,8 @@
 <template>
-    <!-- NavBar components -->
-    <NavBar :name="userName" :role="roleId" />
     <div class="container">
+        <!-- NavBar components -->
+        <NavBar :name="userName" :role="roleId" />
+
         <h2 class="my-5">Product List</h2>
 
         <a href="/product-add" class="btn btn-success mb-3">Add Product</a>
@@ -85,7 +86,7 @@ export default {
                         localStorage.removeItem('email')
                         localStorage.removeItem('name')
                         localStorage.removeItem('role_id')
-                        router.push({name: 'login'})
+                        router.push({ name: 'login' })
                     }
                     console.log(error);
                 });

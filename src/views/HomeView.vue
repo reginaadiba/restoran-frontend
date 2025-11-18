@@ -1,8 +1,8 @@
 <template lang="">
-  <!-- NavBar components -->
-   <NavBar :name="userName" :role="roleId" />
+
   <div>
-    
+    <!-- NavBar components -->
+    <NavBar :name="userName" :role="roleId" />
   </div>
 </template>
 <script>

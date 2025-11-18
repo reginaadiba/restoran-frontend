@@ -1,13 +1,17 @@
 <template>
-    <!-- NavBar components -->
-    <NavBar :name="userName" :role="roleId" />
+
     <div class="container mt-5">
+        <!-- NavBar components -->
+        <NavBar :name="userName" :role="roleId" />
+
         <h2 class="text-center mb-3">Order Report</h2>
         <div class="mb-3 w-25">
             <label for="month" class="form-label">Month</label>
-            <select name="month" id="month" class="form-control" v-model="month">
+            <select name="month" id="month" class="form-control" v-model="month" @change="getReport()">
                 <option value="">Choose Month Period</option>
-                <option v-for="month in months" :value=month.value>{{ month.name }}</option>
+                <option v-for="m in months" :value="m.value">
+                    {{ m.name }}
+                </option>
             </select>
         </div>
 
@@ -16,19 +20,19 @@
                 <div class="col-12 col-sm-4">
                     <div class="box">
                         <label>Order Count</label>
-                        <label></label>
+                        <label>{{ data.orderCount }}</label>
                     </div>
                 </div>
                 <div class="col-12 col-sm-4">
                     <div class="box">
                         <label>Min Payment</label>
-                        <label></label>
+                        <label>Rp. {{ data.minPayment }}</label>
                     </div>
                 </div>
                 <div class="col-12 col-sm-4">
                     <div class="box">
                         <label>Max Payment</label>
-                        <label></label>
+                        <label>Rp. {{ data.maxPayment }}</label>
                     </div>
                 </div>
             </div>
@@ -52,8 +56,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td colspan="9" class="text-center">No Data</td>
+                    <tr v-for="(order, index) in data.orders" :key="index">
+                        <td>{{ index + 1 }}</td>
+                        <td>{{ order.customer_name }}</td>
+                        <td>{{ order.table_no }}</td>
+                        <td>{{ order.order_date }}</td>
+                        <td>{{ order.order_time }}</td>
+                        <td>{{ order.total }}</td>
+                        <td>{{ order.status }}</td>
+                        <td>{{ order.waitress.name }}</td>
+                        <td>{{ order.cashier ? order.cashier.name : '' }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -75,20 +87,25 @@ export default {
             roleId: '',
             orderReport: [],
             months: [
-                {'value': 1, 'name': 'January'},
-                {'value': 2, 'name': 'February'},
-                {'value': 3, 'name': 'March'},
-                {'value': 4, 'name': 'April'},
-                {'value': 5, 'name': 'May'},
-                {'value': 6, 'name': 'June'},
-                {'value': 7, 'name': 'July'},
-                {'value': 8, 'name': 'August'},
-                {'value': 9, 'name': 'September'},
-                {'value': 10, 'name': 'October'},
-                {'value': 11, 'name': 'November'},
-                {'value': 12, 'name': 'December'},
+                { 'value': 1, 'name': 'January' },
+                { 'value': 2, 'name': 'February' },
+                { 'value': 3, 'name': 'March' },
+                { 'value': 4, 'name': 'April' },
+                { 'value': 5, 'name': 'May' },
+                { 'value': 6, 'name': 'June' },
+                { 'value': 7, 'name': 'July' },
+                { 'value': 8, 'name': 'August' },
+                { 'value': 9, 'name': 'September' },
+                { 'value': 10, 'name': 'October' },
+                { 'value': 11, 'name': 'November' },
+                { 'value': 12, 'name': 'December' },
             ],
-            month: ''
+            month: '',
+            data: {
+                orderCount: 0,
+                minPayment: 0,
+                maxPayment: 0
+            }
         }
     },
     mounted() {
@@ -101,10 +118,31 @@ export default {
         if (this.roleId != 4) {
             router.push({ name: 'home' })
         }
-        this.getOrderReport()
+        this.getReport()
     },
     methods: {
-        
+        getReport() {
+            console.log(this.month)
+            axios.get('http://restoran.test/api/order-report?month=' + this.month, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+                .then((response) => {
+                    console.log(response.data.data)
+                    this.data = response.data.data
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    if (error.response.status == 401) {
+                        localStorage.removeItem('token')
+                        localStorage.removeItem('email')
+                        localStorage.removeItem('name')
+                        localStorage.removeItem('role_id')
+                        router.push({ name: 'login' })
+                    }
+                });
+        }
     },
 }
 </script>
@@ -115,6 +153,7 @@ export default {
     padding: 30px;
     font-size: 24px;
 }
+
 .box label {
     display: block;
 }

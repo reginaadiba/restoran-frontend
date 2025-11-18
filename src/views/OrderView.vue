@@ -1,7 +1,9 @@
 <template>
-    <!-- NavBar components -->
-    <NavBar :name="userName" :role="roleId" />
+
     <div>
+        <!-- NavBar components -->
+        <NavBar :name="userName" :role="roleId" />
+
         <div class="container-fluid mt-5">
             <!-- Item List -->
             <div class="row">

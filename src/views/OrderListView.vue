@@ -1,7 +1,9 @@
 <template>
-    <!-- NavBar components -->
-    <NavBar :name="userName" :role="roleId" />
+
     <div class="container mt-5">
+        <!-- NavBar components -->
+        <NavBar :name="userName" :role="roleId" />
+
         <h2 class="text-center mb-3">Order List</h2>
 
         <table class="table table-striped table-hover">
@@ -30,7 +32,10 @@
                     <td>{{ order.status }}</td>
                     <td>{{ order.waitress.name }}</td>
                     <td>{{ order.cashier ? order.cashier.name : '' }}</td>
-                    <td><RouterLink :to="{ name: 'productUpdate', params: { productId: item.id } }">View Detail</RouterLink></td>
+                    <td>
+                        <RouterLink :to="{ name: 'orderDetail', params: { orderId: order.id } }">View Detail
+                        </RouterLink>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -39,6 +44,7 @@
 <script>
 import axios from 'axios';
 import NavBar from '@/components/NavBar.vue';
+import router from '@/router';
 
 export default {
     components: {
@@ -56,10 +62,6 @@ export default {
         this.userName = localStorage.getItem('name')
         if (!this.userName || this.userName == '' || this.userName == null) {
             router.push({ name: 'login' })
-        }
-        this.roleId = localStorage.getItem('role_id')
-        if (this.roleId != 1 && this.roleId != 4) {
-            router.push({ name: 'home' })
         }
         this.getOrders()
     },
