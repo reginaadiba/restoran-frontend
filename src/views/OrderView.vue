@@ -97,7 +97,7 @@ export default {
             items: [],
             filteredItems: [],
             keyword: '',
-            url: 'http://restoran.test/storage/items/',
+            url: `${import.meta.env.VITE_BASE_URL}/storage/items/`,
             orders: [],
             total: 0,
             customerName: '',
@@ -120,7 +120,7 @@ export default {
     methods: {
         getItems() {
             // let data = this
-            axios.get('http://restoran.test/api/item', {
+            axios.get(`${import.meta.env.VITE_API_URL}/item`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -221,7 +221,7 @@ export default {
             })
 
             this.processing = true
-            axios.post('http://restoran.test/api/order', {
+            axios.post(`${import.meta.env.VITE_API_URL}/order`, {
                 'customer_name': this.customerName,
                 'table_no': this.tableNo,
                 'items': items

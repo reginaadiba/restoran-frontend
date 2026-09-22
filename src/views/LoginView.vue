@@ -38,7 +38,7 @@ export default {
     },
     methods: {
         login() {
-            axios.post('http://restoran.test/api/auth/login', {
+            axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, {
                 email: this.email,
                 password: this.password,
                 device_name: this.device_name

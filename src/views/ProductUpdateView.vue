@@ -46,7 +46,7 @@ export default {
         return {
             userName: '',
             roleId: '',
-            url: 'http://restoran.test/storage/items/',
+            url: `${import.meta.env.VITE_BASE_URL}/storage/items/`,
             productId: '',
             item: '',
             file: ''
@@ -68,7 +68,7 @@ export default {
         getItem() {
             // console.log(this.$route.params.productId)
             this.productId = this.$route.params.productId
-            axios.get('http://restoran.test/api/item/' + this.productId, {
+            axios.get(`${import.meta.env.VITE_API_URL}/item/` + this.productId, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -93,7 +93,7 @@ export default {
             formData.append('image_file', this.file)
             formData.append('category', 'Food')
 
-            axios.post('http://restoran.test/api/item/' + this.productId,
+            axios.post(`${import.meta.env.VITE_API_URL}/item/` + this.productId,
                 formData, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,

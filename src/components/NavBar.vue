@@ -47,7 +47,7 @@ export default {
   props: ['name', 'role'],
   methods: {
     logout() {
-      axios.get('http://restoran.test/api/auth/logout', {
+      axios.get(`${import.meta.env.VITE_API_URL}/auth/logout`, {
         headers: { "Authorization": `Bearer ${localStorage.getItem('token')}` }
       })
         .then(function (response) {

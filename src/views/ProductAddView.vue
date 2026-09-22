@@ -38,7 +38,7 @@ export default {
         return {
             userName: '',
             roleId: '',
-            url: 'http://restoran.test/storage/items/',
+            url: `${import.meta.env.VITE_BASE_URL}/storage/items/`,
             name: '',
             price: '',
             file: ''
@@ -67,7 +67,7 @@ export default {
             formData.append('image_file', this.file)
             formData.append('category', 'Snacks')
 
-            axios.post('http://restoran.test/api/item',
+            axios.post(`${import.meta.env.VITE_API_URL}/item`,
                 formData,
                 {
                     headers: {

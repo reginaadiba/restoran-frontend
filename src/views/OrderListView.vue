@@ -67,7 +67,7 @@ export default {
     },
     methods: {
         getOrders() {
-            axios.get('http://restoran.test/api/order', {
+            axios.get(`${import.meta.env.VITE_API_URL}/order`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }

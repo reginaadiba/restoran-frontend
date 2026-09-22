@@ -51,7 +51,7 @@ export default {
             userName: '',
             roleId: '',
             items: [],
-            url: 'http://restoran.test/storage/items/'
+            url: `${import.meta.env.VITE_BASE_URL}/storage/items/`
         }
     },
     mounted() {
@@ -69,7 +69,7 @@ export default {
     methods: {
         getItems() {
             // let data = this
-            axios.get('http://restoran.test/api/item', {
+            axios.get(`${import.meta.env.VITE_API_URL}/item`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }

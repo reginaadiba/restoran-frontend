@@ -123,7 +123,7 @@ export default {
     methods: {
         getReport() {
             console.log(this.month)
-            axios.get('http://restoran.test/api/order-report?month=' + this.month, {
+            axios.get(`${import.meta.env.VITE_API_URL}/order-report?month=` + this.month, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }

@@ -89,7 +89,7 @@ export default {
     methods: {
         getOrder() {
             this.orderId = this.$route.params.orderId
-            axios.get('http://restoran.test/api/order/' + this.orderId, {
+            axios.get(`${import.meta.env.VITE_API_URL}/order/` + this.orderId, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -109,7 +109,7 @@ export default {
                 });
         },
         setAsDone(orderId) {
-            axios.get('http://restoran.test/api/order/' + orderId + '/set-as-done', {
+            axios.get(`${import.meta.env.VITE_API_URL}/order/` + orderId + '/set-as-done', {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -134,7 +134,7 @@ export default {
                 });
         },
         setAsPaid(orderId) {
-            axios.get('http://restoran.test/api/order/' + orderId + '/payment', {
+            axios.get(`${import.meta.env.VITE_API_URL}/order/` + orderId + '/payment', {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
