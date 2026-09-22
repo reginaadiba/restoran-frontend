@@ -93,6 +93,8 @@ export default {
             formData.append('image_file', this.file)
             formData.append('category', 'Food')
 
+            formData.append('_method', 'PATCH');
+
             axios.post(`${import.meta.env.VITE_API_URL}/item/` + this.productId,
                 formData, {
                 headers: {
