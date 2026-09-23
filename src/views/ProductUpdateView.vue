@@ -87,9 +87,8 @@ export default {
             }
 
             let formData = new FormData();
-            formData.append('name', this.name)
-            formData.append('price', this.price)
-            formData.append('method', 'patch')
+            formData.append('name', this.item.name)
+            formData.append('price', this.item.price)
             formData.append('image_file', this.file)
             formData.append('category', 'Food')
 
@@ -109,7 +108,7 @@ export default {
                     console.log(error);
                 });
         },
-        imageChanged() {
+        imageChanged(e) {
             let file = e.target.files[0]
             this.file = file
         }
