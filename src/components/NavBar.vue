@@ -29,6 +29,9 @@
             <li v-if="role == 4" class="nav-item">
               <RouterLink class="nav-link" to="/product">Products</RouterLink>
             </li>
+            <li v-if="role == 4" class="nav-item">
+              <RouterLink class="nav-link" to="/user-add">Kelola Pengguna</RouterLink>
+            </li>
             <li class="nav-item">
               <button class="nav-link nav-link--logout" type="button" @click="logout">Logout</button>
             </li>

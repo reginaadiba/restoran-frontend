@@ -8,6 +8,7 @@ import ProductUpdateView from '@/views/ProductUpdateView.vue'
 import OrderListView from '@/views/OrderListView.vue'
 import OrderDetailView from '@/views/OrderDetailView.vue'
 import OrderReportView from '@/views/OrderReportView.vue'
+import UserAddView from '@/views/UserAddView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -60,6 +61,12 @@ const router = createRouter({
       component: ProductUpdateView,
       props: true,
     },
+    {
+      path: '/user-add',
+      name: 'userAdd',
+      component: UserAddView,
+      meta: { requiresManager: true },
+    },
   ],
 })
 
@@ -71,6 +78,10 @@ router.beforeEach((to) => {
   }
 
   if (to.name === 'login' && isLoggedIn) {
+    return { name: 'home' }
+  }
+
+  if (to.meta.requiresManager && localStorage.getItem('role_id') !== '4') {
     return { name: 'home' }
   }
 })
