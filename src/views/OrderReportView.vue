@@ -1,9 +1,6 @@
 <template>
 
     <div class="container mt-5">
-        <!-- NavBar components -->
-        <NavBar :name="userName" :role="roleId" />
-
         <h2 class="text-center mb-3">Order Report</h2>
         <div class="mb-3 w-25">
             <label for="month" class="form-label">Month</label>
@@ -74,13 +71,9 @@
 </template>
 <script>
 import axios from 'axios';
-import NavBar from '@/components/NavBar.vue';
 import router from '@/router';
 
 export default {
-    components: {
-        NavBar
-    },
     data() {
         return {
             userName: '',

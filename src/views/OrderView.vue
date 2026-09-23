@@ -1,9 +1,6 @@
 <template>
 
     <div>
-        <!-- NavBar components -->
-        <NavBar :name="userName" :role="roleId" />
-
         <div class="container-fluid mt-5">
             <!-- Item List -->
             <div class="row">
@@ -82,14 +79,10 @@
     </div>
 </template>
 <script>
-import NavBar from '@/components/NavBar.vue';
 import axios from 'axios';
 import router from '@/router';
 
 export default {
-    components: {
-        NavBar
-    },
     data() {
         return {
             userName: '',

@@ -63,4 +63,16 @@ const router = createRouter({
   ],
 })
 
+router.beforeEach((to) => {
+  const isLoggedIn = Boolean(localStorage.getItem('token') && localStorage.getItem('name'))
+
+  if (to.name !== 'login' && !isLoggedIn) {
+    return { name: 'login' }
+  }
+
+  if (to.name === 'login' && isLoggedIn) {
+    return { name: 'home' }
+  }
+})
+
 export default router

@@ -1,8 +1,5 @@
 <template>
     <div class="container mt-5">
-        <!-- NavBar components -->
-        <NavBar :name="userName" :role="roleId" />
-
         <div class="col-12 col-lg-6">
             <h3>Add New Product</h3>
             <form @submit.prevent="createProduct">
@@ -26,14 +23,10 @@
     </div>
 </template>
 <script>
-import NavBar from '@/components/NavBar.vue';
 import router from '@/router';
 import axios from 'axios';
 
 export default {
-    components: {
-        NavBar
-    },
     data() {
         return {
             userName: '',

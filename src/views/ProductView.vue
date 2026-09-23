@@ -1,8 +1,5 @@
 <template>
     <div class="container">
-        <!-- NavBar components -->
-        <NavBar :name="userName" :role="roleId" />
-
         <h2 class="my-5">Product List</h2>
 
         <a href="/product-add" class="btn btn-success mb-3">Add Product</a>
@@ -38,14 +35,10 @@
     </div>
 </template>
 <script>
-import NavBar from '@/components/NavBar.vue';
 import router from '@/router';
 import axios from 'axios';
 
 export default {
-    components: {
-        NavBar
-    },
     data() {
         return {
             userName: '',

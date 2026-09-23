@@ -1,9 +1,6 @@
 <template>
 
     <div class="container mt-5">
-        <!-- NavBar components -->
-        <NavBar :name="userName" :role="roleId" />
-
         <h2 class="text-center mb-3">Order List</h2>
 
         <table class="table table-striped table-hover">
@@ -43,13 +40,9 @@
 </template>
 <script>
 import axios from 'axios';
-import NavBar from '@/components/NavBar.vue';
 import router from '@/router';
 
 export default {
-    components: {
-        NavBar
-    },
     data() {
         return {
             userName: '',
