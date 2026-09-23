@@ -2,49 +2,44 @@
     <div class="container">
         <h2 class="my-5">Product List</h2>
 
-        <a href="/product-add" class="btn btn-success mb-3">Add Product</a>
+        <RouterLink :to="{ name: 'productAdd' }" class="btn btn-success mb-3">Add Product</RouterLink>
 
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Image</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(item, index) in items" :key="index">
-                    <td>{{ index + 1 }}</td>
-                    <td>{{ item.name }}</td>
-                    <td>Rp {{ item.price }}</td>
-                    <td>
-                        <img v-if="item.image" :src="url + item.image" style="width: 100px; height: 100px;"
-                            class="object-fit-cover">
-                        <img v-else src="@/assets/images/nopict.png" style="width: 100px; height: 100px;"
-                            class="object-fit-cover">
-                    </td>
-                    <td>
-                        <RouterLink :to="{ name: 'productUpdate', params: { productId: item.id } }">Edit</RouterLink>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div></div>
+        <DataTable :items="items" :columns="columns" :loading="loading" empty-text="Belum ada data produk.">
+            <template #cell-price="{ value }">
+                Rp {{ value }}
+            </template>
+            <template #cell-image="{ item }">
+                <img v-if="item.image" :src="url + item.image" class="product-image" alt="">
+                <img v-else src="@/assets/images/nopict.png" class="product-image" alt="Tidak ada gambar">
+            </template>
+            <template #actions="{ item }">
+                <RouterLink class="btn btn-sm btn-outline-primary"
+                    :to="{ name: 'productUpdate', params: { productId: item.id } }">
+                    Edit
+                </RouterLink>
+            </template>
+        </DataTable>
     </div>
 </template>
 <script>
 import router from '@/router';
 import axios from 'axios';
+import DataTable from '@/components/DataTable.vue';
 
 export default {
+    components: { DataTable },
     data() {
         return {
             userName: '',
             roleId: '',
             items: [],
-            url: `${import.meta.env.VITE_BASE_URL}/storage/items/`
+            url: `${import.meta.env.VITE_BASE_URL}/storage/items/`,
+            loading: false,
+            columns: [
+                { key: 'name', label: 'Name' },
+                { key: 'price', label: 'Price' },
+                { key: 'image', label: 'Image' },
+            ],
         }
     },
     mounted() {
@@ -61,18 +56,16 @@ export default {
     },
     methods: {
         getItems() {
-            // let data = this
+            this.loading = true
             axios.get(`${import.meta.env.VITE_API_URL}/item`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             })
                 .then((response) => {
-                    console.log(response.data.data);
-                    // data.items = response.data.data;
                     this.items = response.data.data;
                 })
-                .catch(function (error) {
+                .catch((error) => {
                     // console.log(error.response.status)
                     if (error.response.status == 401) {
                         localStorage.removeItem('token')
@@ -82,6 +75,9 @@ export default {
                         router.push({ name: 'login' })
                     }
                     console.log(error);
+                })
+                .finally(() => {
+                    this.loading = false
                 });
         },
         searchItems() {

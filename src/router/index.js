@@ -9,6 +9,8 @@ import OrderListView from '@/views/OrderListView.vue'
 import OrderDetailView from '@/views/OrderDetailView.vue'
 import OrderReportView from '@/views/OrderReportView.vue'
 import UserAddView from '@/views/UserAddView.vue'
+import UserCreateView from '@/views/UserCreateView.vue'
+import UserEditView from '@/views/UserEditView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -65,6 +67,19 @@ const router = createRouter({
       path: '/user-add',
       name: 'userAdd',
       component: UserAddView,
+      meta: { requiresManager: true },
+    },
+    {
+      path: '/user-create',
+      name: 'userCreate',
+      component: UserCreateView,
+      meta: { requiresManager: true },
+    },
+    {
+      path: '/user/:userId/edit',
+      name: 'userEdit',
+      component: UserEditView,
+      props: true,
       meta: { requiresManager: true },
     },
   ],
