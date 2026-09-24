@@ -15,22 +15,25 @@
         <div id="main-navigation" class="collapse navbar-collapse">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0 site-navigation">
             <li class="nav-item">
-              <RouterLink class="nav-link" to="/">Home</RouterLink>
+              <RouterLink class="nav-link" exact-active-class="nav-link--active" to="/">Home</RouterLink>
             </li>
             <li v-if="role == 4 || role == 1" class="nav-item">
-              <RouterLink class="nav-link" to="/order">Order</RouterLink>
+              <RouterLink class="nav-link" exact-active-class="nav-link--active" to="/order">Order</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink class="nav-link" to="/order-list">Order List</RouterLink>
+              <RouterLink class="nav-link" exact-active-class="nav-link--active" to="/order-list">Order List
+              </RouterLink>
             </li>
             <li v-if="role == 4" class="nav-item">
-              <RouterLink class="nav-link" to="/order-report">Order Report</RouterLink>
+              <RouterLink class="nav-link" exact-active-class="nav-link--active" to="/order-report">Order Report
+              </RouterLink>
             </li>
             <li v-if="role == 4" class="nav-item">
-              <RouterLink class="nav-link" to="/product">Products</RouterLink>
+              <RouterLink class="nav-link" exact-active-class="nav-link--active" to="/product">Products</RouterLink>
             </li>
             <li v-if="role == 4" class="nav-item">
-              <RouterLink class="nav-link" to="/user-add">Kelola Pengguna</RouterLink>
+              <RouterLink class="nav-link" exact-active-class="nav-link--active" to="/user-management">Kelola Pengguna
+              </RouterLink>
             </li>
             <li class="nav-item">
               <button class="nav-link nav-link--logout" type="button" @click="logout">Logout</button>
@@ -132,7 +135,8 @@ export default {
 }
 
 .site-navigation .nav-link:hover,
-.site-navigation .nav-link.router-link-active {
+.site-navigation .nav-link.router-link-exact-active,
+.site-navigation .nav-link.nav-link--active {
   color: #0d4169;
   background: #b9e1fb;
 }

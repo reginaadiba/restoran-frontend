@@ -64,7 +64,7 @@ const router = createRouter({
       props: true,
     },
     {
-      path: '/user-add',
+      path: '/user-management',
       name: 'userAdd',
       component: UserAddView,
       meta: { requiresManager: true },

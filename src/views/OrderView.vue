@@ -15,14 +15,14 @@
                     <div class="col-12">
                         <div class="row">
                             <div v-for="item in filteredItems" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
-                                <div class="card">
-                                    <img :src="url + item.image" height="200px" class="card-img-top objet-fit-over"
-                                        alt="...">
-                                    <div class="card-body text-center">
-                                        <h5 class="card-title">{{ item.name }}</h5>
-                                        <p class="card-text">Rp. {{ item.price }}</p>
-                                        <p><button class="btn btn-primary" @click="orderItem(item.id)">Order</button>
-                                        </p>
+                                <div class="card product-card h-100">
+                                    <img :src="url + item.image" class="card-img-top product-card-image" alt="...">
+                                    <div class="card-body d-flex flex-column justify-content-between text-center">
+                                        <div>
+                                            <h5 class="card-title product-card-title">{{ item.name }}</h5>
+                                            <p class="card-text product-card-price">Rp. {{ item.price }}</p>
+                                        </div>
+                                        <button class="btn btn-primary mt-3" @click="orderItem(item.id)">Order</button>
                                     </div>
                                 </div>
                             </div>
@@ -254,6 +254,32 @@ export default {
 
 .order-box {
     border-left: solid 1px #ccc;
+}
+
+.product-card {
+    border: 1px solid #dfeaf6;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 18px rgba(31, 73, 120, 0.06);
+}
+
+.product-card-image {
+    height: 180px;
+    object-fit: cover;
+    background: #f3f8ff;
+}
+
+.product-card-title {
+    min-height: 48px;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.product-card-price {
+    margin-bottom: 0;
+    color: #1f5ea8;
+    font-weight: 700;
 }
 
 .total-box {

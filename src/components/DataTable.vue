@@ -1,5 +1,12 @@
 <template>
     <div class="data-table-container">
+        <div v-if="searchable" class="data-table-toolbar">
+            <div class="data-table-search">
+                <input v-model="searchTerm" type="search" class="form-control form-control-sm"
+                    :placeholder="searchPlaceholder" aria-label="Cari data" />
+            </div>
+        </div>
+
         <div class="data-table-wrapper">
             <table class="table data-table table-hover align-middle mb-0">
                 <thead>
@@ -12,7 +19,7 @@
                     <tr v-for="item in paginatedItems" :key="item[rowKey]">
                         <td v-for="column in columns" :key="column.key" :data-label="column.label">
                             <slot :name="`cell-${column.key}`" :item="item" :value="item[column.key]">
-                                {{ item[column.key] }}
+                                {{ resolveCellValue(item, column.key) }}
                             </slot>
                         </td>
                         <td v-if="$slots.actions" class="data-table-actions text-end" data-label="Action">
@@ -30,7 +37,8 @@
         </div>
 
         <div class="data-table-footer">
-            <small class="text-muted">Menampilkan {{ firstItem }}-{{ lastItem }} dari {{ items.length }} data</small>
+            <small class="text-muted">Menampilkan {{ firstItem }}-{{ lastItem }} dari {{ filteredItems.length }}
+                data</small>
             <nav v-if="pageCount > 1" aria-label="Pagination data">
                 <ul class="pagination pagination-sm mb-0">
                     <li class="page-item" :class="{ disabled: currentPage === 1 }">
@@ -64,34 +72,71 @@ export default {
         pageSize: { type: Number, default: 10 },
         loading: { type: Boolean, default: false },
         emptyText: { type: String, default: 'Tidak ada data.' },
+        searchable: { type: Boolean, default: true },
+        searchPlaceholder: { type: String, default: 'Cari data...' },
     },
     data() {
-        return { currentPage: 1 }
+        return {
+            currentPage: 1,
+            searchTerm: '',
+        }
     },
     computed: {
         columnCount() {
             return this.columns.length + (this.$slots.actions ? 1 : 0)
         },
+        filteredItems() {
+            const term = this.searchTerm.trim().toLowerCase()
+
+            if (!term) return this.items
+
+            return this.items.filter((item) => {
+                return this.columns.some((column) => {
+                    const value = this.resolveCellValue(item, column.key)
+                    return String(value ?? '').toLowerCase().includes(term)
+                })
+            })
+        },
         pageCount() {
-            return Math.max(1, Math.ceil(this.items.length / this.pageSize))
+            return Math.max(1, Math.ceil(this.filteredItems.length / this.pageSize))
         },
         paginatedItems() {
             const start = (this.currentPage - 1) * this.pageSize
-            return this.items.slice(start, start + this.pageSize)
+            return this.filteredItems.slice(start, start + this.pageSize)
         },
         firstItem() {
-            return this.items.length === 0 ? 0 : (this.currentPage - 1) * this.pageSize + 1
+            return this.filteredItems.length === 0 ? 0 : (this.currentPage - 1) * this.pageSize + 1
         },
         lastItem() {
-            return Math.min(this.currentPage * this.pageSize, this.items.length)
+            return Math.min(this.currentPage * this.pageSize, this.filteredItems.length)
         },
     },
     watch: {
         items() {
             if (this.currentPage > this.pageCount) this.currentPage = this.pageCount
         },
+        searchTerm() {
+            this.currentPage = 1
+        },
     },
     methods: {
+        resolveCellValue(item, key) {
+            if (item == null) return ''
+
+            const keys = String(key).split('.')
+            let value = item
+
+            for (const currentKey of keys) {
+                if (value == null) return ''
+                value = value[currentKey]
+            }
+
+            if (value == null) return ''
+            if (typeof value === 'object' && 'name' in value) return value.name
+            if (Array.isArray(value)) return value.join(', ')
+
+            return value
+        },
         goToPage(page) {
             if (page >= 1 && page <= this.pageCount) this.currentPage = page
         },
@@ -102,10 +147,12 @@ export default {
 <style scoped>
 .data-table-container {
     width: 100%;
+    display: block;
 }
 
 .data-table-wrapper {
     overflow-x: auto;
+    overflow-y: visible;
     border: 1px solid #d7eaf8;
     border-radius: 12px;
     background: #fff;
@@ -139,7 +186,25 @@ export default {
     justify-content: end;
 }
 
+.data-table-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.75rem;
+}
+
+.data-table-search {
+    width: min(100%, 280px);
+}
+
 @media (max-width: 575.98px) {
+    .data-table-toolbar {
+        justify-content: stretch;
+    }
+
+    .data-table-search {
+        width: 100%;
+    }
+
     .data-table-wrapper {
         overflow: visible;
         border: 0;

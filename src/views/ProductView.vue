@@ -88,6 +88,14 @@ export default {
     },
 }
 </script>
-<style lang="">
-
+<style scoped>
+.product-image {
+    display: block;
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #dfeaf6;
+    background: #f3f8ff;
+}
 </style>
