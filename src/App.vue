@@ -17,9 +17,9 @@ export default {
     <footer v-if="$route.name !== 'login'" class="app-footer">
       <div class="app-footer__inner">
         <div class="app-footer__brand">
-          <span class="app-footer__logo">R</span>
+          <span class="app-footer__logo">eR</span>
           <div>
-            <h3>Restoran</h3>
+            <h3>eNae Resto</h3>
             <p>Rasa hangat untuk setiap momen.</p>
           </div>
         </div>
@@ -36,15 +36,15 @@ export default {
         <div class="app-footer__section">
           <h4>Kontak</h4>
           <ul>
-            <li>Jl. Merdeka No. 25</li>
+            <li>Jl. Melati No. 25</li>
             <li>+62 812-3456-7890</li>
-            <li>09:00 - 22:00</li>
+            <li>09:00 - 21:00</li>
           </ul>
         </div>
       </div>
 
       <div class="app-footer__bottom">
-        <span>© 2026 Restoran</span>
+        <span>© 2026 eNae Resto</span>
         <span>Made by Regina Adiba</span>
       </div>
     </footer>

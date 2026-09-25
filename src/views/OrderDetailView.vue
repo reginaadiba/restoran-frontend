@@ -48,8 +48,8 @@
         <!--  -->
         <div class="mt-3"></div>
         <button v-if="(order.status == 'ordered') && (roleId == 2)" class="btn btn-primary"
-            @click="setAsDone(order.id)">Done</button>
-        <button v-if="(order.status == 'done') && (roleId == 3 || roledId == 4)" class="btn btn-primary"
+            @click="setAsDone(order.id)">Served</button>
+        <button v-if="(order.status == 'done') && (roleId == 3 || roleId == 4)" class="btn btn-primary"
             @click="setAsPaid(order.id)">Paid</button>
     </div>
 </template>

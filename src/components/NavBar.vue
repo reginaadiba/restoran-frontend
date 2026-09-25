@@ -3,8 +3,8 @@
     <nav class="navbar navbar-expand-lg site-navbar">
       <div class="container-fluid site-navbar__inner">
         <RouterLink class="navbar-brand site-brand" to="/">
-          <span class="site-brand__mark">R</span>
-          <span>Restoran</span>
+          <span class="site-brand__mark">eR</span>
+          <span>eNae Resto</span>
         </RouterLink>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-navigation"
